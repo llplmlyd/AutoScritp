@@ -14,6 +14,9 @@ Version=2.0.5
 # get the local ip that you do run this script on to check if has wrong with the $HAproxyIP $HostName
 local_ip=$(ifconfig |awk 'NR==2{print $2}')
 
+# Attention :to use this scritp, you need to deploy  a fileserver-address, the sustitude $yourfileserver-address to the real address.
+# Then， Put the package and the cfg in it.
+
 
 ## now start to define some function for auto deploy.
 
@@ -35,7 +38,7 @@ function adduser(){
 function get_pkg(){
 
         cd $BaseDir
-        wget -N -q  http://10.12.29.98:8090/tools/haproxy-2.0.5.tar.gz
+        wget -N -q  http://yourfileserver-address/tools/haproxy-2.0.5.tar.gz
         tar zxvf haproxy-$Version.tar.gz -C $BaseDir
         cd haproxy-$Version
 
@@ -59,7 +62,7 @@ function set_dir(){
         mkdir -p $InstallDir/conf
         mkdir -p /etc/haproxy
         cd /var/tmp
-        wget http://10.12.29.98:8090/tidb/haproxy.cfg
+        wget http://$yourfileserver-address/tidb/haproxy.cfg
         cp /var/tmp/haproxy.cfg $InstallDir/conf/haproxy.cfg
         ln -s $InstallDir/conf/haproxy.cfg /etc/haproxy/haproxy.cfg
 
@@ -91,7 +94,7 @@ function service_init(){
 
         #cp -r /var/tmp/haproxy.service /usr/lib/systemd/system/
         cd /var/tmp
-        wget http://10.12.29.98:8090/tidb/haproxy.service
+        wget http://$yourfileserver-address/tidb/haproxy.service
         cp -r /var/tmp/haproxy.service /usr/lib/systemd/system/
         cd /usr/lib/systemd/system/
         if [  -e haproxy.service  ]
